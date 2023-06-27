@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
+	_ "net/http/pprof"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -54,7 +56,8 @@ func registerHandler(c *gin.Context) {
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	//r.Use(registerHandler)
+	// pprof路由注册需要在最前面
+	r.Any("/debug/pprof/*pprof", gin.WrapH(http.DefaultServeMux))
 
 	r.Any(url, helloHandle)
 	return r
